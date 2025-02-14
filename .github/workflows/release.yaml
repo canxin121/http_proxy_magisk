@@ -1,0 +1,43 @@
+name: Release Magisk Module
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  release_magisk_module:
+    name: Release Magisk Module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set update rust target
+        run: |
+          rustup target add aarch64-linux-android
+      - name: Instatll Rust Ndk
+        run: |
+          cargo install cargo-ndk
+      - name: Clone Rust Project to temporary directory
+        run: |
+          git clone https://github.com/canxin121/http_proxy ./tmp
+      - name: Build Rust Project
+        run: |
+          cd ./tmp
+          cargo ndk --target aarch64-linux-android build --release
+          cd ..
+      - name: Copy binary to module
+        run: |
+          ls ./tmp/target/aarch64-linux-android/release
+          mkdir -p ./http_proxy
+          mv ./tmp/target/aarch64-linux-android/release/http_proxy ./http_proxy/http_proxy
+      - name: Create Magisk Module
+        run: |
+          zip -r http_proxy.zip ./ -x "*.git*" "*.github*" "*tmp*"
+      - name: Release Magisk Module
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            http_proxy.zip
+          prerelease: false
+          tag_name: ${{ github.event.inputs.tag_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
