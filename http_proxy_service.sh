@@ -1,8 +1,16 @@
-#!/sbin/sh
-# This script will be executed in late_start service mode.
+#!/system/bin/sh
 
-MAGISK_VER_CODE=$(getprop magisk.version_code)
-
-export HTTP_PROXY_CONFIG_PATH="/data/adb/http_proxy/config.toml"
-
-/data/adb/http_proxy/http_proxy &
+(
+    until [ $(getprop init.svc.bootanim) = "stopped" ]; do
+        sleep 10
+    done
+    
+    export HTTP_PROXY_CONFIG_PATH="/data/adb/http_proxy/config.toml"
+    
+    if [ -f "/data/adb/http_proxy/http_proxy" ]; then
+        chmod 755 /data/adb/http_proxy/http_proxy
+        /data/adb/http_proxy/http_proxy &
+    else
+        echo "File '/data/adb/http_proxy/http_proxy' not found"
+    fi
+)&
