@@ -1,0 +1,31 @@
+#!/system/bin/sh
+
+# 基本配置
+SKIPUNZIP=1
+SKIPMOUNT=false
+PROPFILE=true
+POSTFSDATA=false
+LATESTARTSERVICE=true
+
+# 检查安装环境
+if [ "$BOOTMODE" != true ]; then
+  abort "请在Magisk Manager中安装"
+fi
+
+# 解压文件
+ui_print "- 正在安装HTTP代理模块"
+unzip -o "$ZIPFILE" -x 'META-INF/*' -d "$MODPATH" >&2
+
+# 创建并移动http_proxy目录
+ui_print "- 移动http_proxy到系统目录"
+mkdir -p /data/adb/http_proxy/
+mv "$MODPATH/http_proxy/"* /data/adb/http_proxy/
+
+# 设置权限
+ui_print "- 设置权限"
+set_perm_recursive /data/adb/http_proxy/ 0 0 0755 0644
+
+# 清理工作
+rm -rf "$MODPATH/http_proxy"
+
+ui_print "- 安装完成，请重启设备"

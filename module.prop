@@ -1,0 +1,6 @@
+id=http_proxy_magisk
+name=HTTP Proxy Magisk
+version=0.1.0
+versionCode=1
+author=canxin121
+description=A simple HTTP Proxy Service
