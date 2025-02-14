@@ -34,7 +34,7 @@ mv "$MODPATH/http_proxy/"* /data/adb/http_proxy/
 
 # 移动service脚本
 ui_print "- 移动服务脚本"
-unzip -j -o "$ZIPFILE" 'http_proxy_service.sh' -d "${service_dir}" >&2
+mv "$MODPATH/http_proxy_service.sh" "${service_dir}/http_proxy_service.sh"
 
 # 设置权限
 ui_print "- 设置权限"
