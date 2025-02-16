@@ -30,10 +30,14 @@ unzip -o "$ZIPFILE" -x 'META-INF/*' -d "$MODPATH" >&2
 # 创建并移动http_proxy目录
 ui_print "- 移动http_proxy到系统目录"
 mkdir -p /data/adb/http_proxy/
+# 在移动前先删除旧文件
+rm -f /data/adb/http_proxy/*
 mv "$MODPATH/http_proxy/"* /data/adb/http_proxy/
 
 # 移动service脚本
 ui_print "- 移动服务脚本"
+# 在移动前先删除旧文件
+rm -f "${service_dir}/http_proxy_service.sh"
 mv "$MODPATH/http_proxy_service.sh" "${service_dir}/http_proxy_service.sh"
 
 # 设置权限
