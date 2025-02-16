@@ -44,8 +44,6 @@ local_address = "127.0.0.1:3000"
 # 仅支持ip, 不支持域名形式
 host = "1.1.1.1"
 port = 443
-user_agent = "user_agent"
-x_t5_auth = "66666666"
 
 # 混淆配置
 [obfuscation]
